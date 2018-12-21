@@ -198,15 +198,14 @@ function firstRun() {
 
   /**
    * Check if SignApk exists
-   * If not, install it http://www.mediafire.com/download/m4wm3jv0xsgd1us/SignApk.rar
    **/
-  if (fs.existsSync(usrhome+'/Downloads/SignApk') || fs.existsSync(usrhome+'/SignApk')) {
+  if (fs.existsSync(usrhome+'/Downloads/sign') || fs.existsSync(usrhome+'/sign')) {
     console.log('SignApk'.white+'\t\t\t['.white+'ok'.green+']'.white);
-    if (fs.existsSync(usrhome+'/Downloads/SignApk')) { SIGNAPK = usrhome+'/Downloads/SignApk'; } else if (fs.existsSync(usrhome+'/SignApk')) { SIGNAPK = usrhome+'/SignApk'; }
+    if (fs.existsSync(usrhome+'/Downloads/sign')) { SIGNAPK = usrhome+'/Downloads/sign'; } else if (fs.existsSync(usrhome+'/sign')) { SIGNAPK = usrhome+'/sign'; }
     signapk = 1;
   } else {
     console.log('SignApk'.white+'\t\t['.white+'x'.cyan+']'.white);
-    exec('xterm -hold -bg black -fg green -geometry 90x30+0+0 -T "Installing SignApk" -e "sudo apt-get install unrar && cd ~/Downloads && wget http://download1326.mediafire.com/wa4k6w33mmeg/m4wm3jv0xsgd1us/SignApk.rar && unrar x SignApk.rar && cd SignApk && rm cmd.exe" &', (e,stdout,stderr) => {
+    exec('xterm -hold -bg black -fg green -geometry 90x30+0+0 -T "Installing SignApk" -e "cd ~/Downloads && git clone https://github.com/appium/sign.git" &', (e,stdout,stderr) => {
       if (e instanceof Error) {
         console.error(e);
         throw e; 
@@ -968,7 +967,7 @@ function doSignAPK(val) {
   } else if (val == 0) {
     banner();
   } else if (val == 1) { //SignApk
-    exec('sudo -u '+USER+' xterm -bg black -fg green -geometry 90x30+0+0 -T "SignApk - Signing APK" -e "java -jar '+SIGNAPK+'/signapk.jar '+SIGNAPK+'/certificate.pem '+SIGNAPK+'/key.pk8 '+CWD+'/android_remote.apk '+CWD+'/android_remote-signed.apk" &', (e,stdout,stderr) => {
+    exec('sudo -u '+USER+' xterm -bg black -fg green -geometry 90x30+0+0 -T "SignApk - Signing APK" -e "java -jar '+SIGNAPK+'/dist/signapk.jar '+SIGNAPK+'/testkey.x509.pem '+SIGNAPK+'/testkey.pk8 '+CWD+'/android_remote.apk '+CWD+'/android_remote-signed.apk" &', (e,stdout,stderr) => {
       if (e instanceof Error) {
         console.error(e);
         throw e; 
